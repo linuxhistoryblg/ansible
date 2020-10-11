@@ -1,0 +1,7 @@
+/ansible.cfg
+/blocks.yml
+/fact.yml
+/hosts
+/name.yml
+/out
+/package_facts.yml
