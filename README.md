@@ -1,0 +1,3 @@
+# ansible
+
+Quick playbook examples
