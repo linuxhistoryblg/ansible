@@ -1,4 +1,5 @@
 ---
+# Undo yum_when_conditional.yml
 - name: Remove mariadb-server and python3-mysql when host is CentOS8
   hosts: all
   become: True
