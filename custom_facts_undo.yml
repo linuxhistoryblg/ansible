@@ -1,0 +1,26 @@
+---
+# 1. Define local facts which a) define the name of the samba service and b) name of the samba package
+# 2. Copy the facts to the file servers (pick any 2 managed hosts)
+# 3. Write a 2nd play which installs and enables smbd
+- name: smbd removed and stopped
+  hosts: fileservers
+  become: True
+  tasks:
+  - name: stop and disable smbd
+    systemd:
+      name: "{{ ansible_local.sambaservice }}"
+      state: stopped
+      enabled: False
+  - name: remove smbd
+    yum:
+      name: "{{ ansible_local.sambapackage }}"
+      state: absent
+
+- name: smbd undefined and removed from file servers
+  hosts: fileservers
+  become: True
+  tasks:
+  - name: remove directory on fileservers
+    file:
+      path: /etc/ansible/facts.d
+      state: absent        

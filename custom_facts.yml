@@ -1,0 +1,34 @@
+---
+# 1. Define local facts which a) define the name of the samba service and b) name of the samba package
+# 2. Copy the facts to the file servers (pick any 2 managed hosts)
+# 3. Write a 2nd play which installs and enables smbd
+- name: smbd defined and copied to file servers
+  hosts: fileservers
+  become: True
+  tasks:
+  - name: create directory on fileservers
+    file:
+      path: /etc/ansible/facts.d
+      state: directory
+      mode: '0755'
+  - name: create custom fact to hold name of samba service
+    copy:
+      content: '"smb"'
+      dest: /etc/ansible/facts.d/sambaservice.fact
+  - name: create custom fact to hold name of samba package
+    copy:
+      content: '"samba"'
+      dest: /etc/ansible/facts.d/sambapackage.fact
+- name: smbd installed and enabled
+  hosts: fileservers
+  become: True
+  tasks:
+    - name: install smbd
+      yum:
+        name: "{{ansible_local.sambapackage}}"
+        state: latest
+    - name: start and enable smbd
+      systemd:
+        name: "{{ ansible_local.sambaservice }}"
+        state: started
+        enabled: True

@@ -1,0 +1,31 @@
+---
+# Use when to differentiate between OS versions
+# Use a handler to set db root password only if service successfully starts
+- name: install mariadb-server and python3-mysql when host is CentOS8
+  hosts: all
+  become: True
+  tasks:
+    - name: Install MariaDB
+      yum:
+        name: mariadb-server
+        state: latest 
+      when: ansible_distribution_major_version == "8"
+    - name: Install Python3-MySQL
+      yum:
+        name: python3-mysql
+        state: latest
+      when: ansible_distribution_major_version == "8"
+    - name: Start mariadb.service
+      systemd:
+        name: mariadb
+        state: started
+        enabled: yes
+        masked: no
+      notify: set_db_passwd  
+      when: ansible_distribution_major_version == "8"
+  handlers:
+    - name: set_db_passwd
+      mysql_user:
+        name: root
+        password: password
+    
