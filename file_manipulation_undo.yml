@@ -1,0 +1,12 @@
+---
+# Undo:
+# 1. Copy /etc/hosts to tmp
+# 2. Modify with blockinfile module
+- name: File Manipulation Demo
+  hosts: ans2
+  become: True
+  tasks:
+  - name: Remove /etc/hosts from /tmp
+    file:
+      name: /tmp/hosts_copy
+      state: absent

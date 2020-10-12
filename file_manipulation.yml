@@ -1,0 +1,17 @@
+---
+# 1. Copy /etc/hosts to tmp
+# 2. Modify with blockinfile module
+- name: File Manipulation Demo
+  hosts: ans2
+  become: True
+  tasks:
+  - name: Copy /etc/hosts to tmp
+    copy:
+      src: /etc/hosts
+      dest: /tmp/hosts_copy
+  - name: Modify /tmp/hosts_copy with blockinfile module
+    blockinfile:
+      path: /tmp/hosts_copy
+      block: |
+        # this is the first line of block
+        # this is the second
