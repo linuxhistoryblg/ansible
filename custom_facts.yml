@@ -2,6 +2,7 @@
 # 1. Define local facts which a) define the name of the samba service and b) name of the samba package
 # 2. Copy the facts to the file servers (pick any 2 managed hosts)
 # 3. Write a 2nd play which installs and enables smbd
+### Verify custom facts ad-hoc: ansible fileservers -m setup -a 'filter=ansible_local'
 - name: smbd defined and copied to file servers
   hosts: fileservers
   become: True
