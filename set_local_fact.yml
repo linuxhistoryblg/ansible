@@ -1,0 +1,47 @@
+---
+- name: check a text file for a value
+  hosts: localhost
+  become: True
+  gather_facts: False
+  tasks:
+  - name: Read in text file
+    command: cat sb
+    register: result
+
+  - name: Custom fact dir exists
+    file:
+      path: /etc/ansible/facts.d
+      state: directory
+
+  - name: Custom fact file header exists
+    lineinfile: 
+      path: /etc/ansible/facts.d/sys.fact
+      line: '[sys]'
+      insertbefore: BOF
+      create: True
+
+  - name: Set custom fact true if secure boot enabled
+    lineinfile:
+      path: /etc/ansible/facts.d/sys.fact
+      line: sb=enabled
+    when: '"enabled" in result.stdout'
+
+  - name: Set custom fact false if secure boot disabled
+    lineinfile:
+      path: /etc/ansible/facts.d/sys.fact
+      line: sb=disabled
+    when: result.stdout.find('enabled') == -1
+
+- name: Use custom fact
+  hosts: localhost
+  become: True
+  tasks:
+  - name: Render template
+    template:
+      src: ./temp.j2
+      dest: temp.txt
+
+  - name: remove custom fact file
+    file:
+      path: /etc/ansible/facts.d/sys.fact
+      state: absent
