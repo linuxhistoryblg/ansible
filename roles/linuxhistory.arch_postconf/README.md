@@ -56,3 +56,7 @@ Author Information
 ------------------
 
 Dan Davis, linuxhistory.com
+
+Screenshot
+-----------------
+![image info](files/screenshot.png)
