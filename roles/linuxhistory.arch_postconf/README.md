@@ -8,6 +8,7 @@ Arch Linux Post Configuration
       - Install and configure the Sway Window Manager
       - Install and configure the Waybar status bar for Wayland
       - Install and configure the Wofi application picker
+      - Install the Alacritty terminal emulator
 
 
 Requirements
