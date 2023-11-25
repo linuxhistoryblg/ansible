@@ -1,7 +1,6 @@
-Role Name
+Arch Linux Post Configuration
 =========
 
-Arch Linux Post Configuration
   - This role takes a fresh installation of Arch Linux and runs the following post-configuration tasks:
       - Update package cache
       - Upgrade all packages
