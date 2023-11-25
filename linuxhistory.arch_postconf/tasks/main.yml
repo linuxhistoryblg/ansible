@@ -1,0 +1,27 @@
+- name: Sync package cache and upgrade
+  block:
+  - name: Update Package Cache
+    community.general.pacman:
+      update_cache: true
+
+  - name: Upgrade installed packages
+    community.general.pacman:
+      upgrade: true
+
+  - name: Default user: {{ default_username }} is created
+    ansible.builtin.user:
+      name: "{{ default_username }}"
+      password: "{{ default_password | password_hash('sha512') }}"
+      update_password: on_create
+
+- name: Include Sway Tasks
+  ansible.builtin.include_tasks: sway_tasks.yml
+
+- name: Post Config Tasks
+  block:
+  - name: Additional packages are installed
+    community.general.pacman:
+      name: "{{ item }}"
+      state: latest
+    loop:
+      - less

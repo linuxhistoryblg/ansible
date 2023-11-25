@@ -1,0 +1,77 @@
+- name: Install Wayland and Sway WM 
+  block:
+  - name: Wayland is installed
+    community.general.pacman:
+      name: wayland
+      state: latest
+
+  - name: Swaywm and Swaywm dependencies are installed
+    community.general.pacman:
+      name: "{{ item }}"
+      state: latest
+    loop:
+      - sway
+      - swayidle
+      - swaylock
+      - swaybg
+      - polkit
+      - alacritty
+      - waybar
+      - wofi
+      - xorg-xwayland
+      - xorg-xlsclients
+      - qt5-wayland
+      - glfw-wayland
+      - adobe-source-code-pro-fonts
+      - ttf-font-awesome 
+  
+  - name: A config directories exist in {{ default_username }}s home directory
+    ansible.builtin.file:
+      path: "{{ item }}" 
+      state: directory
+      owner: "{{ default_username }}"
+      group: "{{ default_username }}"
+    loop:
+      - /home/{{ default_username }}/.config/sway
+      - /home/{{ default_username }}/.config/alacritty
+      - /home/{{ default_username }}/.config/waybar
+      - /home/{{ default_username }}/.config/wofi
+      - /home/{{ default_username }}/Documents/site-files
+
+  - name: Sway config is copied to {{ default_username }}s home directory
+    ansible.builtin.template:
+      src: sway/config
+      dest: /home/{{ default_username }}/.config/sway/config
+      owner: "{{ default_username }}"
+      group: "{{ default_username }}"
+
+  - name: Waybar configs are copied to {{ default_username }}s home directory
+    ansible.builtin.template:
+      src: waybar/{{ item }}
+      dest: /home/{{ default_username }}/.config/waybar/{{ item }}
+      owner: "{{ default_username }}"
+      group: "{{ default_username }}"
+    loop:
+      - config
+      - style.css
+
+  - name: Wofi config is copied to {{ default_username }}s home directory
+    ansible.builtin.template:
+      src: wofi/style.css
+      dest: /home/{{ default_username }}/.config/wofi/style.css
+      owner: "{{ default_username }}"
+      group: "{{ default_username }}"
+
+  - name: Alacritty configs are copied to {{ default_username }}s home directory
+    ansible.builtin.template:
+      src: alacritty/alacritty.yml
+      dest: /home/{{ default_username }}/.config/alacritty/alacritty.yml
+      owner: "{{ default_username }}"
+      group: "{{ default_username }}"
+
+  - name: Wallpaper is copied to {{ default_username }}s home directory
+    ansible.builtin.copy:
+      src: wallpaper.jpg
+      dest: /home/{{ default_username }}/Documents/site-files/wallpaper.jpg
+      owner: "{{ default_username }}"
+      group: "{{ default_username }}"

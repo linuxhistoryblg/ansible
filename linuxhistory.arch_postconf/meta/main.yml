@@ -1,0 +1,7 @@
+galaxy_info:
+  author: Dan Davis
+  description: Arch Linux Post-Install Configuration
+  company: LinuxHistory.com
+  license: license (GPL-2.0-or-later, MIT, etc)
+  galaxy_tags: []
+dependencies: []
