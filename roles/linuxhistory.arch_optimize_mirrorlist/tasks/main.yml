@@ -1,0 +1,37 @@
+---
+  - name: Master mirrorlist is present on remote host
+    become: True
+    ansible.builtin.template:
+      src: templates/mirrorlist
+      dest: /etc/pacman.d/mirrorlist
+      owner: root
+      group: root
+      mode: "0644"
+      backup: True
+  
+  - name: Uncomment all Servers present in masterlist
+    become: True
+    ansible.builtin.replace:
+      path: /etc/pacman.d/mirrorlist
+      regexp: "^#?"
+      replace: ""
+
+  - name: Rankmirrors is installed
+    become: True
+    community.general.pacman:
+      name: "pacman-contrib"
+      state: latest
+
+  - name: Run rankmirrors on mirrorlist
+    ansible.builtin.command: rankmirrors /etc/pacman.d/mirrorlist -n 3
+    register: result
+
+  - name: Update mirrorlist to top 3
+    become: True
+    ansible.builtin.template:
+      src: templates/new_mirrorlist.j2
+      dest: /etc/pacman.d/mirrorlist
+      owner: root
+      group: root
+      mode: "0644"
+      backup: True
