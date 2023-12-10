@@ -1,0 +1,6 @@
+---
+- name: Update Arch Linux Installed Packages
+  hosts: arch
+  become: True
+  roles:
+    - linuxhistory.arch_update
