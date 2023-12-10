@@ -1,0 +1,9 @@
+- name: Sync package cache and upgrade
+  block:
+  - name: Update Package Cache
+    community.general.pacman:
+      update_cache: true
+
+  - name: Upgrade installed packages
+    community.general.pacman:
+      upgrade: true
