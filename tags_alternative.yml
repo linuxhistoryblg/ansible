@@ -1,0 +1,22 @@
+---
+# The AWX implementation of tags is problematic and requires a typo prone workaround described at: https://github.com/ansible/awx/issues/2222#issuecomment-418396509
+# Rather than tags, break down conditionally executed tasks by block and switch on a variable instead.
+- name: Tags Alternative Demo
+  hosts: localhost
+  gather_facts: no
+  vars:
+    mode: setup
+  tasks:
+  - name: setup tasks
+    when: "mode == 'setup'"
+    block:
+    - name: Setup tasks
+      debug:
+        msg: "Setup Task One"
+  
+  - name: teardown tasks
+    when: "mode == 'teardown'"
+    block:
+    - name: Teardown tasks
+      debug:
+        msg: "Teardown Task One"
